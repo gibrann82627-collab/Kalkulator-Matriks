@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalkulator Matriks Interaktif</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
+  <div class="max-w-6xl mx-auto">
+    <header class="text-center mb-8 border-b border-slate-800 pb-6">
+      <h1 class="text-3xl font-bold text-white tracking-tight">Kalkulator Matriks Interaktif</h1>
+      <p class="text-slate-400 text-sm mt-2">Operasi Penjumlahan, Pengurangan, Perkalian, Transpose, Determinan & Invers Matriks Lengkap dengan Langkah</p>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Matriks A Card -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-indigo-600/30 text-indigo-400 font-bold flex items-center justify-center">A</span>
+            <span class="font-semibold text-lg text-white">Matriks A</span>
+            <span id="labelDimA" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">3 × 3</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <label class="text-xs text-slate-400">Dimensi:</label>
+            <select id="selectRowsA" onchange="changeDimA()" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs">
+              <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option>
+            </select>
+            <span class="text-slate-500">×</span>
+            <select id="selectColsA" onchange="changeDimA()" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs">
+              <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center py-4 bg-slate-950/60 rounded-lg mb-4 border border-slate-800/80">
+          <div class="relative flex items-center px-4">
+            <div class="w-2.5 self-stretch border-l-2 border-t-2 border-b-2 border-indigo-500/70 rounded-l mr-2"></div>
+            <div id="gridA" class="grid gap-2"></div>
+            <div class="w-2.5 self-stretch border-r-2 border-t-2 border-b-2 border-indigo-500/70 rounded-r ml-2"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div class="flex gap-2">
+            <button onclick="randomizeMatrix('A')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition font-medium">Acak</button>
+            <button onclick="clearMatrix('A')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded transition">Kosongkan</button>
+            <button onclick="identityMatrix('A')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded transition">Identitas</button>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-slate-400">Transpose/Det/Inv:</span>
+            <button onclick="runTranspose('A')" class="px-2.5 py-1 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-800/60 rounded font-mono">Aᵀ</button>
+            <button onclick="runDet('A')" class="px-2.5 py-1 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-800/60 rounded font-mono">det(A)</button>
+            <button onclick="runInv('A')" class="px-2.5 py-1 bg-indigo-950/80 hover:bg-indigo-900 text-indigo-300 border border-indigo-800/60 rounded font-mono">A⁻¹</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Matriks B Card -->
+      <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-lg">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-lg bg-emerald-600/30 text-emerald-400 font-bold flex items-center justify-center">B</span>
+            <span class="font-semibold text-lg text-white">Matriks B</span>
+            <span id="labelDimB" class="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-mono">3 × 3</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <label class="text-xs text-slate-400">Dimensi:</label>
+            <select id="selectRowsB" onchange="changeDimB()" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs">
+              <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option>
+            </select>
+            <span class="text-slate-500">×</span>
+            <select id="selectColsB" onchange="changeDimB()" class="bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs">
+              <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center py-4 bg-slate-950/60 rounded-lg mb-4 border border-slate-800/80">
+          <div class="relative flex items-center px-4">
+            <div class="w-2.5 self-stretch border-l-2 border-t-2 border-b-2 border-emerald-500/70 rounded-l mr-2"></div>
+            <div id="gridB" class="grid gap-2"></div>
+            <div class="w-2.5 self-stretch border-r-2 border-t-2 border-b-2 border-emerald-500/70 rounded-r ml-2"></div>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div class="flex gap-2">
+            <button onclick="randomizeMatrix('B')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded transition font-medium">Acak</button>
+            <button onclick="clearMatrix('B')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded transition">Kosongkan</button>
+            <button onclick="identityMatrix('B')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded transition">Identitas</button>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-slate-400">Transpose/Det/Inv:</span>
+            <button onclick="runTranspose('B')" class="px-2.5 py-1 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 rounded font-mono">Bᵀ</button>
+            <button onclick="runDet('B')" class="px-2.5 py-1 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 rounded font-mono">det(B)</button>
+            <button onclick="runInv('B')" class="px-2.5 py-1 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/60 rounded font-mono">B⁻¹</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Operation Bar -->
+    <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 mb-8 text-center shadow-lg">
+      <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold mb-3">Operasi Dua Matriks</div>
+      <div class="flex flex-wrap items-center justify-center gap-3">
+        <button onclick="runAdd()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg shadow-md transition flex items-center gap-2">
+          <span>A + B</span>
+          <span class="text-xs opacity-75 font-normal">(Penjumlahan)</span>
+        </button>
+        <button onclick="runSub()" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold rounded-lg shadow-md transition flex items-center gap-2">
+          <span>A − B</span>
+          <span class="text-xs opacity-75 font-normal">(Pengurangan)</span>
+        </button>
+        <button onclick="runMul()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold rounded-lg shadow-md transition flex items-center gap-2">
+          <span>A × B</span>
+          <span class="text-xs opacity-75 font-normal">(Perkalian)</span>
+        </button>
+        <button onclick="swapAB()" class="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg border border-slate-700 transition flex items-center gap-1.5 text-sm">
+          <span>⇄ Tukar A & B</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Alert Box -->
+    <div id="alertBox" class="hidden mb-8 p-4 rounded-xl border border-amber-500/40 bg-amber-950/30 text-amber-200">
+      <div class="font-semibold text-amber-400 mb-1" id="alertTitle">Peringatan Validasi</div>
+      <div class="text-sm" id="alertDesc"></div>
+    </div>
+
+    <!-- Results Area -->
+    <div id="resultCard" class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
+      <div class="flex flex-wrap items-center justify-between pb-4 border-b border-slate-800 gap-3">
+        <div>
+          <span class="text-xs uppercase tracking-wider text-emerald-400 font-semibold">Hasil Kalkulasi</span>
+          <h2 id="resultTitle" class="text-xl font-bold text-white">A × B</h2>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <button onclick="toggleFraction()" id="btnFraction" class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-slate-200 hover:bg-slate-700">Tampilan: Pecahan</button>
+          <button onclick="copyResultText()" class="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded text-slate-200 hover:bg-slate-700">Salin Hasil</button>
+        </div>
+      </div>
+
+      <div class="my-6 flex items-center justify-center">
+        <div id="matrixResultWrapper" class="relative flex items-center px-4 py-3 bg-slate-950/70 border border-slate-800/80 rounded-xl">
+          <div class="w-3 self-stretch border-l-2 border-t-2 border-b-2 border-emerald-400 rounded-l mr-3"></div>
+          <div id="gridResult" class="grid gap-3 font-mono text-center"></div>
+          <div class="w-3 self-stretch border-r-2 border-t-2 border-b-2 border-emerald-400 rounded-r ml-3"></div>
+        </div>
+      </div>
+
+      <!-- Steps Area -->
+      <div id="stepsSection" class="mt-6 pt-5 border-t border-slate-800/80">
+        <h3 class="text-sm font-semibold text-slate-300 mb-3">Langkah Perhitungan Lengkap:</h3>
+        <div id="stepsList" class="space-y-3 text-xs md:text-sm text-slate-300"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let matA = [[2, -1, 0], [1, 3, 2], [0, 1, 4]];
+    let matB = [[1, 2, -1], [0, 1, 3], [2, -2, 1]];
+    let rowsA = 3, colsA = 3;
+    let rowsB = 3, colsB = 3;
+    let useFraction = true;
+    let lastResult = null;
+
+    function renderGrids() {
+      renderGrid('A', rowsA, colsA, matA);
+      renderGrid('B', rowsB, colsB, matB);
+      document.getElementById('labelDimA').textContent = rowsA + ' × ' + colsA;
+      document.getElementById('labelDimB').textContent = rowsB + ' × ' + colsB;
+    }
+
+    function renderGrid(name, r, c, mat) {
+      const el = document.getElementById('grid' + name);
+      el.style.gridTemplateColumns = 'repeat(' + c + ', minmax(0, 1fr))';
+      el.innerHTML = '';
+      for (let i = 0; i < r; i++) {
+        for (let j = 0; j < c; j++) {
+          const inp = document.createElement('input');
+          inp.type = 'number';
+          inp.value = (mat[i] && mat[i][j] !== undefined) ? mat[i][j] : 0;
+          inp.className = 'w-12 h-10 md:w-14 md:h-12 bg-slate-900/90 border border-slate-700 rounded text-center text-slate-100 font-mono text-sm focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400';
+          inp.oninput = (e) => {
+            const v = parseFloat(e.target.value) || 0;
+            if (!mat[i]) mat[i] = [];
+            mat[i][j] = v;
+          };
+          el.appendChild(inp);
+        }
+      }
+    }
+
+    function changeDimA() {
+      rowsA = parseInt(document.getElementById('selectRowsA').value);
+      colsA = parseInt(document.getElementById('selectColsA').value);
+      matA = resizeMatrix(matA, rowsA, colsA);
+      renderGrids();
+    }
+
+    function changeDimB() {
+      rowsB = parseInt(document.getElementById('selectRowsB').value);
+      colsB = parseInt(document.getElementById('selectColsB').value);
+      matB = resizeMatrix(matB, rowsB, colsB);
+      renderGrids();
+    }
+
+    function resizeMatrix(m, nr, nc) {
+      const res = [];
+      for (let i = 0; i < nr; i++) {
+        const row = [];
+        for (let j = 0; j < nc; j++) {
+          row.push((m[i] && m[i][j] !== undefined) ? m[i][j] : 0);
+        }
+        res.push(row);
+      }
+      return res;
+    }
+
+    function randomizeMatrix(name) {
+      if (name === 'A') {
+        for (let i = 0; i < rowsA; i++) for (let j = 0; j < colsA; j++) matA[i][j] = Math.floor(Math.random() * 19) - 9;
+      } else {
+        for (let i = 0; i < rowsB; i++) for (let j = 0; j < colsB; j++) matB[i][j] = Math.floor(Math.random() * 19) - 9;
+      }
+      renderGrids();
+    }
+
+    function clearMatrix(name) {
+      if (name === 'A') {
+        for (let i = 0; i < rowsA; i++) for (let j = 0; j < colsA; j++) matA[i][j] = 0;
+      } else {
+        for (let i = 0; i < rowsB; i++) for (let j = 0; j < colsB; j++) matB[i][j] = 0;
+      }
+      renderGrids();
+    }
+
+    function identityMatrix(name) {
+      const size = name === 'A' ? Math.min(rowsA, colsA) : Math.min(rowsB, colsB);
+      if (name === 'A') {
+        rowsA = size; colsA = size;
+        document.getElementById('selectRowsA').value = size;
+        document.getElementById('selectColsA').value = size;
+        matA = [];
+        for (let i = 0; i < size; i++) {
+          const row = [];
+          for (let j = 0; j < size; j++) row.push(i === j ? 1 : 0);
+          matA.push(row);
+        }
+      } else {
+        rowsB = size; colsB = size;
+        document.getElementById('selectRowsB').value = size;
+        document.getElementById('selectColsB').value = size;
+        matB = [];
+        for (let i = 0; i < size; i++) {
+          const row = [];
+          for (let j = 0; j < size; j++) row.push(i === j ? 1 : 0);
+          matB.push(row);
+        }
+      }
+      renderGrids();
+    }
+
+    function swapAB() {
+      const tM = matA, tR = rowsA, tC = colsA;
+      matA = matB; rowsA = rowsB; colsA = colsB;
+      matB = tM; rowsB = tR; colsB = tC;
+      document.getElementById('selectRowsA').value = rowsA;
+      document.getElementById('selectColsA').value = colsA;
+      document.getElementById('selectRowsB').value = rowsB;
+      document.getElementById('selectColsB').value = colsB;
+      renderGrids();
+    }
+
+    function showAlert(msg) {
+      const b = document.getElementById('alertBox');
+      document.getElementById('alertDesc').textContent = msg;
+      b.classList.remove('hidden');
+    }
+
+    function hideAlert() {
+      document.getElementById('alertBox').classList.add('hidden');
+    }
+
+    function toFraction(num) {
+      if (Math.abs(num - Math.round(num)) < 1e-6) return Math.round(num).toString();
+      const sign = num < 0 ? '-' : '';
+      let val = Math.abs(num);
+      let h1 = 1, h2 = 0, k1 = 0, k2 = 1, b = val;
+      do {
+        const a = Math.floor(b);
+        let aux = h1; h1 = a * h1 + h2; h2 = aux;
+        aux = k1; k1 = a * k1 + k2; k2 = aux;
+        b = 1 / (b - a);
+      } while (Math.abs(val - h1 / k1) > val * 1e-6 && k1 < 1000);
+      return k1 === 1 ? sign + h1 : sign + h1 + '/' + k1;
+    }
+
+    function fmt(n) {
+      return useFraction ? toFraction(n) : Number(n.toFixed(4)).toString();
+    }
+
+    function toggleFraction() {
+      useFraction = !useFraction;
+      document.getElementById('btnFraction').textContent = 'Tampilan: ' + (useFraction ? 'Pecahan' : 'Desimal');
+      if (lastResult) renderResult(lastResult);
+    }
+
+    function runAdd() {
+      hideAlert();
+      if (rowsA !== rowsB || colsA !== colsB) {
+        showAlert('Dimensi matriks tidak sama: Matriks A berukuran ' + rowsA + '×' + colsA + ', Matriks B berukuran ' + rowsB + '×' + colsB + '. Penjumlahan mensyaratkan dimensi kedua matriks persis sama.');
+        return;
+      }
+      const res = [];
+      const steps = [];
+      for (let i = 0; i < rowsA; i++) {
+        const row = [];
+        for (let j = 0; j < colsA; j++) {
+          const val = matA[i][j] + matB[i][j];
+          row.push(val);
+          steps.push('C[' + (i+1) + ',' + (j+1) + '] = ' + matA[i][j] + ' + ' + matB[i][j] + ' = ' + val);
+        }
+        res.push(row);
+      }
+      displayResult('Penjumlahan Matriks (A + B)', res, steps);
+    }
+
+    function runSub() {
+      hideAlert();
+      if (rowsA !== rowsB || colsA !== colsB) {
+        showAlert('Dimensi matriks tidak sama: Matriks A berukuran ' + rowsA + '×' + colsA + ', Matriks B berukuran ' + rowsB + '×' + colsB + '. Pengurangan mensyaratkan dimensi kedua matriks persis sama.');
+        return;
+      }
+      const res = [];
+      const steps = [];
+      for (let i = 0; i < rowsA; i++) {
+        const row = [];
+        for (let j = 0; j < colsA; j++) {
+          const val = matA[i][j] - matB[i][j];
+          row.push(val);
+          steps.push('C[' + (i+1) + ',' + (j+1) + '] = ' + matA[i][j] + ' - ' + matB[i][j] + ' = ' + val);
+        }
+        res.push(row);
+      }
+      displayResult('Pengurangan Matriks (A − B)', res, steps);
+    }
+
+    function runMul() {
+      hideAlert();
+      if (colsA !== rowsB) {
+        showAlert('Perkalian tidak valid: Jumlah kolom Matriks A (' + colsA + ') tidak sama dengan jumlah baris Matriks B (' + rowsB + '). Syarat perkalian matriks A(m×k) × B(k×n) adalah dimensi dalam (inner dimensions) harus sama.');
+        return;
+      }
+      const res = [];
+      const steps = [];
+      for (let i = 0; i < rowsA; i++) {
+        const row = [];
+        for (let j = 0; j < colsB; j++) {
+          let sum = 0;
+          let terms = [];
+          for (let k = 0; k < colsA; k++) {
+            sum += matA[i][k] * matB[k][j];
+            terms.push('(' + matA[i][k] + '×' + matB[k][j] + ')');
+          }
+          row.push(sum);
+          steps.push('C[' + (i+1) + ',' + (j+1) + '] = ' + terms.join(' + ') + ' = ' + sum);
+        }
+        res.push(row);
+      }
+      displayResult('Perkalian Matriks (A × B)', res, steps);
+    }
+
+    function runTranspose(name) {
+      hideAlert();
+      const m = name === 'A' ? matA : matB;
+      const r = m.length, c = m[0].length;
+      const res = [];
+      for (let j = 0; j < c; j++) {
+        const row = [];
+        for (let i = 0; i < r; i++) row.push(m[i][j]);
+        res.push(row);
+      }
+      displayResult('Transpose Matriks ' + name + ' (' + name + 'ᵀ)', res, ['Baris menjadi kolom dan kolom menjadi baris (dimensi berubah dari ' + r + '×' + c + ' menjadi ' + c + '×' + r + ').']);
+    }
+
+    function runDet(name) {
+      hideAlert();
+      const m = name === 'A' ? matA : matB;
+      const r = m.length, c = m[0].length;
+      if (r !== c) {
+        showAlert('Determinan hanya terdefinisi untuk matriks persegi. Matriks ' + name + ' berukuran ' + r + '×' + c + ' bukan matriks persegi.');
+        return;
+      }
+      if (r === 2) {
+        const det = m[0][0]*m[1][1] - m[0][1]*m[1][0];
+        displayScalarResult('Determinan Matriks ' + name + ' (det(' + name + '))', det, [
+          'det = (a·d) - (b·c) = (' + m[0][0] + ' × ' + m[1][1] + ') - (' + m[0][1] + ' × ' + m[1][0] + ') = ' + det
+        ]);
+      } else if (r === 3) {
+        const [a,b,cE] = m[0], [d,e,f] = m[1], [g,h,iE] = m[2];
+        const t1 = a * (e*iE - f*h);
+        const t2 = b * (d*iE - f*g);
+        const t3 = cE * (d*h - e*g);
+        const det = t1 - t2 + t3;
+        displayScalarResult('Determinan Matriks ' + name + ' (det(' + name + '))', det, [
+          'Ekspansi Baris Pertama: ' + a + '(' + e + '×' + iE + ' - ' + f + '×' + h + ') - ' + b + '(' + d + '×' + iE + ' - ' + f + '×' + g + ') + ' + cE + '(' + d + '×' + h + ' - ' + e + '×' + g + ')',
+          'Suku = ' + t1 + ' - (' + t2 + ') + (' + t3 + ') = ' + det
+        ]);
+      } else {
+        showAlert('Perhitungan determinan interaktif dikhususkan untuk matriks 2×2 dan 3×3.');
+      }
+    }
+
+    function runInv(name) {
+      hideAlert();
+      const m = name === 'A' ? matA : matB;
+      const r = m.length, c = m[0].length;
+      if (r !== c) {
+        showAlert('Invers hanya terdefinisi untuk matriks persegi. Matriks ' + name + ' berukuran ' + r + '×' + c + ' bukan persegi.');
+        return;
+      }
+      if (r === 2) {
+        const det = m[0][0]*m[1][1] - m[0][1]*m[1][0];
+        if (Math.abs(det) < 1e-12) {
+          showAlert('Determinan = 0 (Matriks Singular). Invers tidak terdefinisi karena formula memerlukan pembagian dengan determinan (1/det).');
+          return;
+        }
+        const inv = [
+          [m[1][1] / det, -m[0][1] / det],
+          [-m[1][0] / det, m[0][0] / det]
+        ];
+        displayResult('Invers Matriks ' + name + ' (' + name + '⁻¹)', inv, [
+          'Langkah 1: det(' + name + ') = ' + det + ' (≠ 0, memiliki invers)',
+          'Langkah 2: Adjoin = [[' + m[1][1] + ', ' + -m[0][1] + '], [' + -m[1][0] + ', ' + m[0][0] + ']]',
+          'Langkah 3: Invers = (1/' + det + ') × Adjoin'
+        ]);
+      } else if (r === 3) {
+        const [a,b,cE] = m[0], [d,e,f] = m[1], [g,h,iE] = m[2];
+        const det = a*(e*iE - f*h) - b*(d*iE - f*g) + cE*(d*h - e*g);
+        if (Math.abs(det) < 1e-12) {
+          showAlert('Determinan = 0 (Matriks Singular). Invers tidak terdefinisi.');
+          return;
+        }
+        const c11 = e*iE - f*h, c12 = -(d*iE - f*g), c13 = d*h - e*g;
+        const c21 = -(b*iE - cE*h), c22 = a*iE - cE*g, c23 = -(a*h - b*g);
+        const c31 = b*f - cE*e, c32 = -(a*f - cE*d), c33 = a*e - b*d;
+        const inv = [
+          [c11/det, c21/det, c31/det],
+          [c12/det, c22/det, c32/det],
+          [c13/det, c23/det, c33/det]
+        ];
+        displayResult('Invers Matriks ' + name + ' (' + name + '⁻¹)', inv, [
+          'det(' + name + ') = ' + det + ' (≠ 0, invers ada)',
+          'Matriks Adjoin diperoleh dari transpose matriks kofaktor.',
+          'Invers = (1/det) × Adjoin'
+        ]);
+      } else {
+        showAlert('Invers langkah demi langkah didukung untuk ukuran 2×2 dan 3×3.');
+      }
+    }
+
+    function displayResult(title, mat, steps) {
+      lastResult = { type: 'matrix', title, mat, steps };
+      renderResult(lastResult);
+    }
+
+    function displayScalarResult(title, val, steps) {
+      lastResult = { type: 'scalar', title, val, steps };
+      renderResult(lastResult);
+    }
+
+    function renderResult(data) {
+      document.getElementById('resultTitle').textContent = data.title;
+      const grid = document.getElementById('gridResult');
+      if (data.type === 'matrix') {
+        const r = data.mat.length, c = data.mat[0].length;
+        grid.style.gridTemplateColumns = 'repeat(' + c + ', minmax(0, 1fr))';
+        grid.innerHTML = '';
+        for (let i = 0; i < r; i++) {
+          for (let j = 0; j < c; j++) {
+            const cell = document.createElement('div');
+            cell.className = 'px-3 py-2 bg-emerald-950/40 border border-emerald-500/40 text-emerald-300 font-semibold rounded text-sm md:text-base min-w-[50px]';
+            cell.textContent = fmt(data.mat[i][j]);
+            grid.appendChild(cell);
+          }
+        }
+      } else {
+        grid.style.gridTemplateColumns = '1fr';
+        grid.innerHTML = '<div class="text-3xl font-bold text-emerald-400 py-2 px-6">' + fmt(data.val) + '</div>';
+      }
+
+      const stepsList = document.getElementById('stepsList');
+      stepsList.innerHTML = '';
+      data.steps.forEach(s => {
+        const p = document.createElement('div');
+        p.className = 'p-2.5 rounded bg-slate-950/40 border border-slate-800 text-slate-300 font-mono text-xs';
+        p.textContent = s;
+        stepsList.appendChild(p);
+      });
+    }
+
+    function copyResultText() {
+      if (!lastResult) return;
+      let text = lastResult.title + '\n';
+      if (lastResult.type === 'matrix') {
+        text += lastResult.mat.map(r => r.map(fmt).join('\t')).join('\n');
+      } else {
+        text += 'Hasil = ' + fmt(lastResult.val);
+      }
+      navigator.clipboard.writeText(text);
+      alert('Hasil disalin ke clipboard!');
+    }
+
+    // Init
+    renderGrids();
+    runMul();
+  </script>
+</body>
+</html>
